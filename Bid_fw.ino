@@ -13,6 +13,7 @@ Components:
 #include "Bid_fw.h"
 
 HTU21D  Temp_sensor;
+struct_bid   bid_data;
 
 void setup() {
   Serial.begin(115200);
@@ -22,8 +23,11 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
+  
+  Serial.println(F("Leyendo sensores... "));
+  bid_data.uv           = UV_sensor_read();                   //Units: mW/cm2
+  bid_data.humidity     = Temp_sensor.readHumidity();         
+  bid_data.temperature  = Temp_sensor.readTemperature();      //Units: Cº
 }
 
 void Wifi_init(void){

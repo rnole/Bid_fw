@@ -9,4 +9,12 @@
 #include <ESP8266WebServer.h>     
 #include <WiFiManager.h>
 
+typedef struct{
+  float temperature;
+  float humidity;
+  float uv;
+}struct_bid;
+
+
+
 #endif
