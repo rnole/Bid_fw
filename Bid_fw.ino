@@ -9,10 +9,14 @@ Components:
 - Pressure Sensor(I2C)
 - Humidity Sensor(I2C)
 */
+#include <Wire.h>
+#include <SparkFunHTU21D.h>
 #include "Bid_fw.h"
 
+HTU21D  Temp_sensor;
+
 void setup() {
-  // put your setup code here, to run once:
+  Temp_sensor.begin();
 
 }
 
