@@ -9,20 +9,44 @@ Components:
 - Pressure Sensor(I2C)
 - Humidity Sensor(I2C)
 */
-#include <Wire.h>
-#include <SparkFunHTU21D.h>
+
 #include "Bid_fw.h"
 
 HTU21D  Temp_sensor;
 
 void setup() {
+  Serial.begin(115200);
+  Wifi_init();
   Temp_sensor.begin();
-
+  
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
 
+}
+
+void Wifi_init(void){
+
+  WiFiManager wifiManager;
+  IPAddress _ip, _gw, _sn;
+  _ip.fromString(STATIC_IP);
+  _gw.fromString(STATIC_GW);
+  _sn.fromString(STATIC_SN);
+  
+  wifiManager.setSTAStaticIPConfig(_ip, _gw, _sn);
+  
+  if (!wifiManager.autoConnect(WIFI_SSID, WIFI_PASSWORD)) {
+    Serial.println("failed to connect, we should reset as see if it connects");
+    delay(3000);
+    ESP.reset();
+    delay(5000);
+  }
+
+  //if you get here you have connected to the WiFi
+  Serial.println("connected!");
+  Serial.println("local ip: ");
+  Serial.println(WiFi.localIP());
 }
 
 float UV_sensor_read(void) {
