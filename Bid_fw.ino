@@ -16,7 +16,6 @@ HTU21D  Temp_sensor;
 MCP3208 ADC(SS);
 WiFiClient espClient;
 PubSubClient client(espClient);
-struct_bid   bid_data;
 uint32_t last_time = 0;
 
 void setup() {
@@ -29,15 +28,16 @@ void setup() {
 }
 
 void loop() {
-
+  
   if(!client.connected()) {
     Mqtt_reconnect();
   }
-  client.loop();    //Why this lines???
+  client.loop();    //Why this line???
 
   if((millis() - last_time) > TIME_TO_WAIT){
     
       Serial.println(F("Leyendo sensores... "));
+      struct_bid   bid_data;
       bid_data.uv           = UV_sensor_read();                   //Units: mW/cm2
       bid_data.humidity     = Temp_sensor.readHumidity();         
       bid_data.temperature  = Temp_sensor.readTemperature();      //Units: Cº
@@ -48,6 +48,7 @@ void loop() {
       bid_data.o3           = MCP3208_read_o3();
       bid_data.noise        = MCP3208_read_noise();
 
+      Mqtt_send_data(&bid_data);      
       last_time = millis();
   }
 }
