@@ -11,6 +11,7 @@
 #define NUMBER_OF_READINGS            10
 
 /* MCP3208 definitions */
+#define MCP3208_RES  4095
 #define CO_CHANNEL    0
 #define CO2_CHANNEL   1
 #define NO2_CHANNEL   2
