@@ -8,6 +8,8 @@
 #include <DNSServer.h>            
 #include <ESP8266WebServer.h>     
 #include <WiFiManager.h>
+#include <PubSubClient.h>
+#include <ArduinoJson.h>
 #include <MCP3208.h>
 #include <SPI.h>
 

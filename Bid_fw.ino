@@ -11,29 +11,45 @@ Components:
 
 #include "Bid_fw.h"
 
+/*  Globals  */
 HTU21D  Temp_sensor;
 MCP3208 ADC(SS);
+WiFiClient espClient;
+PubSubClient client(espClient);
 struct_bid   bid_data;
+uint32_t last_time = 0;
 
 void setup() {
   Serial.begin(115200);
   Wifi_init();
   Temp_sensor.begin();
   ADC.begin();
+  client.setServer(MQTT_SERVER, MQTT_PORT);
+  client.setCallback(Mqtt_callback);
 }
 
 void loop() {
-  
-  Serial.println(F("Leyendo sensores... "));
-  bid_data.uv           = UV_sensor_read();                   //Units: mW/cm2
-  bid_data.humidity     = Temp_sensor.readHumidity();         
-  bid_data.temperature  = Temp_sensor.readTemperature();      //Units: Cº
-  bid_data.co           = MCP3208_read_co();
-  bid_data.co2          = MCP3208_read_co2();
-  bid_data.no2          = MCP3208_read_no2();
-  bid_data.so2          = MCP3208_read_so2();
-  bid_data.o3           = MCP3208_read_o3();
-  bid_data.noise        = MCP3208_read_noise();
+
+  if(!client.connected()) {
+    Mqtt_reconnect();
+  }
+  client.loop();    //Why this lines???
+
+  if((millis() - last_time) > TIME_TO_WAIT){
+    
+      Serial.println(F("Leyendo sensores... "));
+      bid_data.uv           = UV_sensor_read();                   //Units: mW/cm2
+      bid_data.humidity     = Temp_sensor.readHumidity();         
+      bid_data.temperature  = Temp_sensor.readTemperature();      //Units: Cº
+      bid_data.co           = MCP3208_read_co();
+      bid_data.co2          = MCP3208_read_co2();
+      bid_data.no2          = MCP3208_read_no2();
+      bid_data.so2          = MCP3208_read_so2();
+      bid_data.o3           = MCP3208_read_o3();
+      bid_data.noise        = MCP3208_read_noise();
+
+      last_time = millis();
+  }
 }
 
 /* Wifi_init

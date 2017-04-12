@@ -25,5 +25,13 @@
 #define STATIC_SN       "255.255.255.0"
 #define WIFI_SSID       "TP-LINK_2.4GHz_5F288B"
 #define WIFI_PASSWORD   "200220315"
+#define MQTT_SERVER     "ec2-52-27-179-130.us-west-2.compute.amazonaws.com"
+#define MQTT_PORT       1883
+
+/* Others */
+#define TIME_TO_WAIT    5000
 
 #endif
+
+
+
